@@ -18,7 +18,8 @@ public class TouchingDirections : MonoBehaviour
         get { return _isGrounded; }
         set 
         { 
-            _isGrounded = value; 
+            _isGrounded = value;
+            _animator.SetBool(AnimationStrings.IsGrounded, _isGrounded);
         }
     }
     // 벽 Cast 거리값
@@ -41,19 +42,20 @@ public class TouchingDirections : MonoBehaviour
     private Vector2 WallCheckDirection => 
         gameObject.transform.localScale.x > 0 ? Vector2.right : Vector2.left;
 
+    private Animator _animator;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _touchingCollider = GetComponent<CapsuleCollider2D>();
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
         // 바닥이랑 충돌했는지 여부를 계산
-        _isGrounded = _touchingCollider.Cast(Vector2.down, _groundHits, groundHitDistance) > 0;
-        _isWall = _touchingCollider.Cast(WallCheckDirection, _wallHits,wallHitDistance) > 0;
-
-
+        IsGrounded = _touchingCollider.Cast(Vector2.down, _groundHits, groundHitDistance) > 0;
+        IsWall = _touchingCollider.Cast(WallCheckDirection, _wallHits,wallHitDistance) > 0;
     }
 }

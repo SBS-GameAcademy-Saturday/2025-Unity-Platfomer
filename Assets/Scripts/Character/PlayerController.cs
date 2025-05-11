@@ -74,8 +74,12 @@ public class PlayerController : MonoBehaviour
         {
             _currentJumpCount = 0;
         }
+        // Unity 5 : _rb.velocity.y
+        _animator.SetFloat(AnimationStrings.yVelocity, _rb.linearVelocity.y);
         float currentSpeed = IsSprint ? sprintSpeed : walkSpeed;
         currentSpeed = _touchingDirections.IsWall ? 0 : currentSpeed;
+
+        currentSpeed = _animator.GetBool(AnimationStrings.CanMove) ? currentSpeed : 0;
         _rb.linearVelocity = new Vector2(_inputDirection.x * currentSpeed, _rb.linearVelocity.y);
     }
 
@@ -116,8 +120,19 @@ public class PlayerController : MonoBehaviour
     {
         if (callback.started && _currentJumpCount < maxJumpCount)
         {
+            _animator.SetTrigger(AnimationStrings.Jump);
+
             _currentJumpCount++;
             _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, jumpPower);
+        }
+    }
+
+    public void OnGroundAttackInput(InputAction.CallbackContext callback)
+    {
+        if(callback.started)
+        {
+            _animator.SetTrigger(AnimationStrings.Attack);
+
         }
     }
 }

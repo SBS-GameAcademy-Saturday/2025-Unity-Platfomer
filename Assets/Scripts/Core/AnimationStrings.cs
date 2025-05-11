@@ -6,5 +6,9 @@ public static class AnimationStrings
 {
     public static string IsMoving = "IsMoving";
     public static string IsSprint = "IsSprint";
-
+    public static string yVelocity = "yVelocity";
+    public static string Jump = "Jump";
+    public static string IsGrounded = "IsGrounded";
+    public static string Attack = "Attack";
+    public static string CanMove = "CanMove";
 }
