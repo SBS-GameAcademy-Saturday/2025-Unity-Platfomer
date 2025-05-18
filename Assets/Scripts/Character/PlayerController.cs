@@ -70,6 +70,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!_animator.GetBool(AnimationStrings.IsAlive))
+        {
+            return;
+        }
+
         if(_rb.linearVelocityY < 0 && _touchingDirections.IsGrounded)
         {
             _currentJumpCount = 0;

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TouchingDirections : MonoBehaviour
 {
+    [SerializeField] private ContactFilter2D contactFilter;
+
     CapsuleCollider2D _touchingCollider;
 
     // 바닥 Cast 거리값
@@ -55,7 +57,9 @@ public class TouchingDirections : MonoBehaviour
     void Update()
     {
         // 바닥이랑 충돌했는지 여부를 계산
-        IsGrounded = _touchingCollider.Cast(Vector2.down, _groundHits, groundHitDistance) > 0;
-        IsWall = _touchingCollider.Cast(WallCheckDirection, _wallHits,wallHitDistance) > 0;
+        IsGrounded = _touchingCollider.Cast(Vector2.down, contactFilter, _groundHits, groundHitDistance) > 0;
+        IsWall = _touchingCollider.Cast(WallCheckDirection, contactFilter, _wallHits,wallHitDistance) > 0;
+        Debug.Log("IsWall : " + IsWall);
+
     }
 }
