@@ -76,8 +76,11 @@ public class Knight : MonoBehaviour
             FlipDirection();
         }
 
-        float currentSpped = _animator.GetBool(AnimationStrings.CanMove) ? walkSpeed : 0;
-        _rb.linearVelocity = new Vector2(moveDirection.x * currentSpped, _rb.linearVelocityY);
+        if(!_animator.GetBool(AnimationStrings.LockVelocity))
+        {
+            float currentSpped = _animator.GetBool(AnimationStrings.CanMove) ? walkSpeed : 0;
+            _rb.linearVelocity = new Vector2(moveDirection.x * currentSpped, _rb.linearVelocityY);
+        }
     }
 
     private void FlipDirection()

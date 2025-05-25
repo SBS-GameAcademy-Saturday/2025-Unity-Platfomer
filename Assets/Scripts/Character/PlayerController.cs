@@ -79,13 +79,19 @@ public class PlayerController : MonoBehaviour
         {
             _currentJumpCount = 0;
         }
+
+        // 내가 이동로직(Input받아서 이동하는)전체가 실행되면 안된다.
+        if(!_animator.GetBool(AnimationStrings.LockVelocity))
+        {
+            float currentSpeed = IsSprint ? sprintSpeed : walkSpeed;
+            currentSpeed = _touchingDirections.IsWall ? 0 : currentSpeed;
+            currentSpeed = _animator.GetBool(AnimationStrings.CanMove) ? currentSpeed : 0;
+            _rb.linearVelocity = new Vector2(_inputDirection.x * currentSpeed, _rb.linearVelocity.y);
+
+        }
+
         // Unity 5 : _rb.velocity.y
         _animator.SetFloat(AnimationStrings.yVelocity, _rb.linearVelocity.y);
-        float currentSpeed = IsSprint ? sprintSpeed : walkSpeed;
-        currentSpeed = _touchingDirections.IsWall ? 0 : currentSpeed;
-
-        currentSpeed = _animator.GetBool(AnimationStrings.CanMove) ? currentSpeed : 0;
-        _rb.linearVelocity = new Vector2(_inputDirection.x * currentSpeed, _rb.linearVelocity.y);
     }
 
     public void OnMoveInput(InputAction.CallbackContext callback)

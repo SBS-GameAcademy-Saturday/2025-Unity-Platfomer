@@ -59,7 +59,5 @@ public class TouchingDirections : MonoBehaviour
         // 바닥이랑 충돌했는지 여부를 계산
         IsGrounded = _touchingCollider.Cast(Vector2.down, contactFilter, _groundHits, groundHitDistance) > 0;
         IsWall = _touchingCollider.Cast(WallCheckDirection, contactFilter, _wallHits,wallHitDistance) > 0;
-        Debug.Log("IsWall : " + IsWall);
-
     }
 }

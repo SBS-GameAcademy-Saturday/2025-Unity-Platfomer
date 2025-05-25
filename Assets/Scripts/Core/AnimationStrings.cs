@@ -14,4 +14,6 @@ public static class AnimationStrings
     public static string CoolTime = "CoolTime";
     public static string HasTarget = "HasTarget";
     public static string IsAlive = "IsAlive";
+    public static string Hit = "Hit";
+    public static string LockVelocity = "LockVelocity";
 }
