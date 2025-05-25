@@ -146,4 +146,17 @@ public class PlayerController : MonoBehaviour
 
         }
     }
+
+    public void OnProjectileAttack(InputAction.CallbackContext callback)
+    {
+        if(callback.started && _touchingDirections.IsGrounded)
+        {
+            _animator.SetTrigger(AnimationStrings.ProjectileAttack);
+        }
+    }
+
+    public void OnKnockBack(Vector2 knockBack)
+    {
+        _rb.linearVelocity = new Vector2(knockBack.x, _rb.linearVelocityY + knockBack.y);
+    }
 }

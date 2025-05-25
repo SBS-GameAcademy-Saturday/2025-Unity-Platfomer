@@ -16,4 +16,5 @@ public static class AnimationStrings
     public static string IsAlive = "IsAlive";
     public static string Hit = "Hit";
     public static string LockVelocity = "LockVelocity";
+    public static string ProjectileAttack = "ProjectileAttack";
 }

@@ -1,7 +1,11 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Damagable : MonoBehaviour
 {
+    // KnockBack 이벤트
+    public UnityEvent<Vector2> OnKnockBack;
+
     // 체력
     [SerializeField] private int _health = 100;
     // 최대 체력
@@ -40,6 +44,9 @@ public class Damagable : MonoBehaviour
 
             // Hit 트리거
             _animator.SetTrigger(AnimationStrings.Hit);
+
+            // knockback 이벤트를 호출한다.
+            OnKnockBack.Invoke(knockback);
 
             if (_health <= 0)
             {

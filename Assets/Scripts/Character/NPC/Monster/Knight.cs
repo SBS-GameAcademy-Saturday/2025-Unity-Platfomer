@@ -11,6 +11,7 @@ public class Knight : MonoBehaviour
     [SerializeField] private EMoveDirection direction;
 
     [SerializeField] private float walkSpeed = 3.0f;
+    [SerializeField] private float stopRate = 0.6f;
 
     public float CoolTime
     {
@@ -23,9 +24,9 @@ public class Knight : MonoBehaviour
         get { return direction; }
         set
         {
-            // ¹æÇâÀ» °»½ÅÇÑ´Ù.
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
             direction = value;
-            switch(direction)
+            switch (direction)
             {
                 case EMoveDirection.Left:
                     transform.localScale = new Vector3(-1, 1, 1);
@@ -59,12 +60,12 @@ public class Knight : MonoBehaviour
 
     private void Update()
     {
-        if(!_animator.GetBool(AnimationStrings.IsAlive))
+        if (!_animator.GetBool(AnimationStrings.IsAlive))
         {
             return;
         }
 
-        if(CoolTime > 0)
+        if (CoolTime > 0)
         {
             CoolTime -= Time.deltaTime;
         }
@@ -76,27 +77,43 @@ public class Knight : MonoBehaviour
             FlipDirection();
         }
 
-        if(!_animator.GetBool(AnimationStrings.LockVelocity))
+        if (!_animator.GetBool(AnimationStrings.LockVelocity))
         {
-            float currentSpped = _animator.GetBool(AnimationStrings.CanMove) ? walkSpeed : 0;
-            _rb.linearVelocity = new Vector2(moveDirection.x * currentSpped, _rb.linearVelocityY);
+            if (_animator.GetBool(AnimationStrings.CanMove))
+            {
+                float currentSpped = _animator.GetBool(AnimationStrings.CanMove) ? walkSpeed : 0;
+                _rb.linearVelocity = new Vector2(moveDirection.x * currentSpped, _rb.linearVelocityY);
+            }
+            else
+            {
+                float stopX = Mathf.Lerp(_rb.linearVelocityX, 0, stopRate);
+                _rb.linearVelocity = new Vector2(stopX, _rb.linearVelocityY);
+            }
         }
     }
 
     private void FlipDirection()
     {
-        if(Direction == EMoveDirection.Right)
+        if (Direction == EMoveDirection.Right)
         {
             Direction = EMoveDirection.Left;
         }
-        else if(Direction == EMoveDirection.Left)
+        else if (Direction == EMoveDirection.Left)
         {
             Direction = EMoveDirection.Right;
         }
         else
         {
-            Debug.LogError("¼³Á¤µÈ ¹æÇâÀÌ ¾Æ´Õ´Ï´Ù.");
+            Debug.LogError("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Õ´Ï´ï¿½.");
         }
+    }
+
+    public void OnKnockBack(Vector2 knockback)
+    {
+        _rb.linearVelocity = new Vector2(knockback.x, _rb.linearVelocity.y + knockback.y);
+
+        if (knockback.x > 0 && transform.localScale.x > 0) FlipDirection();
+        else if(knockback.x < 0 && transform.localScale.x < 0) FlipDirection();
     }
 
 }
