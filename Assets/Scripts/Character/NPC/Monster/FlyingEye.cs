@@ -14,10 +14,31 @@ public class FlyingEye : MonoBehaviour
     [SerializeField] private float flightSpeed = 2f;
     [SerializeField] private float waypointReachedDistance = 0.1f; // 
     [SerializeField] private List<Transform> wayPoints = new List<Transform>();
+    [SerializeField] private BoxCollider2D _deathCollider;
+
+    public bool HasTarget
+    {
+        set { _animator.SetBool(AnimationStrings.HasTarget, value); }
+    }
+    public bool CanMove
+    {
+        get { return _animator.GetBool(AnimationStrings.CanMove); }
+    }
+    public bool IsAlive
+    {
+        get { return _animator.GetBool(AnimationStrings.IsAlive); }
+    }
+
+    public float CoolTime
+    {
+        get { return _animator.GetFloat(AnimationStrings.CoolTime); }
+        set { _animator.SetFloat(AnimationStrings.CoolTime, value); }
+    }
 
     private Animator _animator;
     private Rigidbody2D _rb;
     private Damagable _damagable;
+    private AttackBoxZone _attackBoxZone;
 
     private Transform _currentWaypoint; // 현재 내가 이동해야할 목적지
     private int _waypointIndex = 0;
@@ -26,12 +47,34 @@ public class FlyingEye : MonoBehaviour
         _animator = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         _damagable = GetComponent<Damagable>();
+        _attackBoxZone = GetComponentInChildren<AttackBoxZone>();
     }
 
     void Update()
     {
-        Flight();
-        UpdateDirection();
+        if (!IsAlive)
+        {
+            _rb.gravityScale = 2f;
+            _rb.linearVelocity = new Vector2(0, _rb.linearVelocityY);
+            _deathCollider.enabled = true;
+            return;
+        }
+
+        if (CoolTime > 0)
+        {
+            CoolTime -= Time.deltaTime;
+        }
+
+        HasTarget = _attackBoxZone.detectionColliders.Count > 0;
+        if (CanMove)
+        {
+            Flight();
+            UpdateDirection();
+        }
+        else
+        {
+            _rb.linearVelocity = Vector2.zero;
+        }
     }
 
     private void Flight()

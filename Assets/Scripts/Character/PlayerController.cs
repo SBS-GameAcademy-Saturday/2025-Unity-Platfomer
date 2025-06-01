@@ -159,4 +159,17 @@ public class PlayerController : MonoBehaviour
     {
         _rb.linearVelocity = new Vector2(knockBack.x, _rb.linearVelocityY + knockBack.y);
     }
+
+    public void OnExitGame(InputAction.CallbackContext callback)
+    {
+        if(callback.started)
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+    }
+
 }
