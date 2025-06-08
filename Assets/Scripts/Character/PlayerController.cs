@@ -129,7 +129,8 @@ public class PlayerController : MonoBehaviour
     // 2단 혹은 3단 혹은 단일 점프 기능 구현
     public void OnJumpInput(InputAction.CallbackContext callback)
     {
-        if (callback.started && _currentJumpCount < maxJumpCount)
+        if (callback.started && _currentJumpCount < maxJumpCount
+            && _animator.GetBool(AnimationStrings.IsAttacking) == false)
         {
             _animator.SetTrigger(AnimationStrings.Jump);
 
@@ -142,8 +143,8 @@ public class PlayerController : MonoBehaviour
     {
         if(callback.started)
         {
+            _animator.SetBool(AnimationStrings.IsAttacking,true);
             _animator.SetTrigger(AnimationStrings.Attack);
-
         }
     }
 

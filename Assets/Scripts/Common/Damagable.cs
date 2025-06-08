@@ -6,6 +6,9 @@ public class Damagable : MonoBehaviour
     // KnockBack 이벤트
     public UnityEvent<Vector2> OnKnockBack;
 
+    // 체력 갱신 이벤트
+    public UnityEvent<int, int> OnHealthChange;
+
     // 체력
     [SerializeField] private int _health = 100;
     // 최대 체력
@@ -47,6 +50,9 @@ public class Damagable : MonoBehaviour
 
             // knockback 이벤트를 호출한다.
             OnKnockBack.Invoke(knockback);
+
+            // HealthChange 이벤트를 호출한다.
+            OnHealthChange.Invoke(_health, _maxHealth);
 
             if (_health <= 0)
             {
